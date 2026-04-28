@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="PIE 2026">
+  <meta name="theme-color" content="#ffffff">
+  <title>Registro PIE 2026</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23185FA5'/><rect x='6' y='7' width='20' height='15' rx='3' fill='%23B5D4F4'/><circle cx='11' cy='13' r='3' fill='white'/><rect x='16' y='11' width='7' height='2' rx='1' fill='white'/><rect x='16' y='14' width='5' height='2' rx='1' fill='%2385B7EB'/></svg>">
+</head>
+<body>
+
+<!-- ╔══════════════════════════════╗
+     ║       PANTALLA LOGIN         ║
+     ╚══════════════════════════════╝ -->
+<div id="screen-login" class="screen active">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg viewBox="0 0 36 36" fill="none">
+          <rect x="2" y="4" width="32" height="24" rx="5" fill="#B5D4F4"/>
+          <circle cx="11" cy="14" r="4.5" fill="#185FA5"/>
+          <rect x="18" y="11" width="11" height="2.5" rx="1.25" fill="#185FA5"/>
+          <rect x="18" y="15" width="8" height="2.5" rx="1.25" fill="#85B7EB"/>
+          <rect x="8" y="22" width="20" height="2.5" rx="1.25" fill="#85B7EB"/>
+          <rect x="13" y="30" width="10" height="3" rx="1.5" fill="#185FA5"/>
+        </svg>
+      </div>
+      <div class="login-title">Registro PIE 2026</div>
+      <div class="login-sub">Programa de Integración Escolar<br>Liceo Técnico Profesional</div>
+
+      <div class="login-error" id="login-error"></div>
+
+      <label class="field-label" for="login-rut">RUT de usuario</label>
+      <input class="field-input" id="login-rut" type="text" placeholder="12.345.678-9" autocomplete="username">
+
+      <label class="field-label" for="login-clave">Clave de acceso</label>
+      <input class="field-input" id="login-clave" type="password" placeholder="••••••••" autocomplete="current-password">
+
+      <button class="btn-primary" onclick="doLogin()">Ingresar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════╗
+     ║       PANTALLA HOME          ║
+     ╚══════════════════════════════╝ -->
+<div id="screen-home" class="screen">
+  <div class="topbar">
+    <div class="topbar-info">
+      <div class="topbar-title">Registro PIE 2026</div>
+      <div class="topbar-sub" id="user-name">—</div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()" title="Cerrar sesión">
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M10 2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M7 5l-3 3 3 3M4 8h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="home-hero">
+    <div class="home-icon">
+      <svg viewBox="0 0 32 32" fill="none">
+        <rect x="2" y="4" width="28" height="19" rx="4" fill="#B5D4F4"/>
+        <circle cx="10" cy="13" r="4" fill="#185FA5"/>
+        <rect x="17" y="10" width="9" height="2.5" rx="1.25" fill="#185FA5"/>
+        <rect x="17" y="14" width="6" height="2" rx="1" fill="#85B7EB"/>
+        <rect x="6" y="20" width="18" height="2" rx="1" fill="#85B7EB"/>
+        <rect x="12" y="25" width="8" height="2.5" rx="1.25" fill="#185FA5"/>
+      </svg>
+    </div>
+    <div class="home-title">Bienvenido/a</div>
+    <div class="home-sub">Liceo Técnico Profesional · PIE 2026</div>
+  </div>
+
+  <div class="home-search-wrap">
+    <input class="search-input" id="home-search-input" type="search"
+      placeholder="Buscar estudiante por nombre o RUT..."
+      oninput="homeSearch(this.value)">
+  </div>
+
+  <div class="search-results-wrap" id="home-search-results"></div>
+
+  <div class="page-content" id="home-main-content">
+    <div class="section-lbl">Cursos</div>
+    <div class="curso-grid" id="curso-grid"></div>
+
+    <div class="section-lbl">Vistas rápidas</div>
+    <div class="action-grid">
+      <div class="action-card" onclick="goView('alertas')">
+        <div class="action-icon" style="background:var(--c-red-bg)">
+          <svg viewBox="0 0 22 22" fill="none">
+            <path d="M11 2l2.5 6.5H20l-5.5 4 2 6.5L11 15.5 6.5 19l2-6.5L3 8.5h6.5L11 2z" fill="#E24B4A"/>
+          </svg>
+        </div>
+        <div>
+          <div class="action-lbl">Alertas</div>
+          <div class="action-sub" id="alert-count-home">—</div>
+        </div>
+      </div>
+
+      <div class="action-card" onclick="goView('neep')">
+        <div class="action-icon" style="background:var(--c-purple-bg)">
+          <svg viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="2" width="8" height="8" rx="2" fill="#534AB7"/>
+            <rect x="12" y="2" width="8" height="8" rx="2" fill="#534AB7"/>
+            <rect x="2" y="12" width="8" height="8" rx="2" fill="#AFA9EC"/>
+            <rect x="12" y="12" width="8" height="8" rx="2" fill="#AFA9EC"/>
+          </svg>
+        </div>
+        <div>
+          <div class="action-lbl">NEEP</div>
+          <div class="action-sub">Necesidad permanente</div>
+        </div>
+      </div>
+
+      <div class="action-card" onclick="goView('neet')">
+        <div class="action-icon" style="background:var(--c-teal-bg)">
+          <svg viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="8" stroke="#1D9E75" stroke-width="2"/>
+            <path d="M7 11l3 3 5-5.5" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="action-lbl">NEET</div>
+          <div class="action-sub">Necesidad transitoria</div>
+        </div>
+      </div>
+
+      <div class="action-card" onclick="goAgregar()">
+        <div class="action-icon" style="background:var(--c-blue-bg)">
+          <svg viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="8" r="4" fill="#185FA5"/>
+            <path d="M4 19c0-3.9 3.1-7 7-7s7 3.1 7 7" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="18" cy="17" r="3.5" fill="white" stroke="#185FA5" stroke-width="1"/>
+            <path d="M18 15.5v3M16.5 17h3" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="action-lbl">Agregar</div>
+          <div class="action-sub">Nuevo estudiante</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-lbl" style="margin-top:16px">Total registrados</div>
+    <div class="action-card" onclick="goView('todos')" style="margin-bottom:8px">
+      <div class="action-icon" style="background:var(--c-gray-bg)">
+        <svg viewBox="0 0 22 22" fill="none">
+          <rect x="2" y="5" width="18" height="2.5" rx="1.25" fill="#888780"/>
+          <rect x="2" y="10" width="14" height="2.5" rx="1.25" fill="#B4B2A9"/>
+          <rect x="2" y="15" width="16" height="2.5" rx="1.25" fill="#B4B2A9"/>
+        </svg>
+      </div>
+      <div>
+        <div class="action-lbl">Ver todos los estudiantes</div>
+        <div class="action-sub">16 registros PIE 2026</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════╗
+     ║       PANTALLA LISTA         ║
+     ╚══════════════════════════════╝ -->
+<div id="screen-list" class="screen">
+  <div class="topbar">
+    <div class="back-btn" onclick="goHome()">
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="topbar-info">
+      <div class="topbar-title" id="list-title">Lista</div>
+      <div class="topbar-sub" id="list-sub"></div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="stats-row" id="list-stats"></div>
+    <input class="search-input" id="list-q" type="search" placeholder="Buscar en esta lista..." oninput="renderList()" style="margin-bottom:10px">
+    <div class="filter-scroll" id="list-chips"></div>
+    <div id="list-body"></div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════╗
+     ║      PANTALLA DETALLE        ║
+     ╚══════════════════════════════╝ -->
+<div id="screen-detail" class="screen">
+  <div class="topbar">
+    <div class="back-btn" onclick="goBack()">
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="topbar-info">
+      <div class="topbar-title" id="detail-title"></div>
+      <div class="topbar-sub" id="detail-sub"></div>
+    </div>
+  </div>
+  <div class="page-content" id="detail-body"></div>
+</div>
+
+<!-- ╔══════════════════════════════╗
+     ║    PANTALLA AGREGAR          ║
+     ╚══════════════════════════════╝ -->
+<div id="screen-agregar" class="screen">
+  <div class="topbar">
+    <div class="back-btn" onclick="goHome()">
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="topbar-info">
+      <div class="topbar-title">Agregar estudiante</div>
+      <div class="topbar-sub">Nuevo registro PIE</div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="form-success" id="form-success">
+      ✓ Estudiante agregado correctamente al registro PIE 2026.
+    </div>
+
+    <form id="add-form" onsubmit="event.preventDefault(); submitEstudiante()">
+
+      <div class="form-section">
+        <div class="form-section-title">Datos personales *</div>
+        <div class="form-field">
+          <label class="form-label" for="f-nom">Nombre completo *</label>
+          <input class="form-input" id="f-nom" type="text" placeholder="Apellido Apellido, Nombre(s)" required>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-rut">RUT *</label>
+          <input class="form-input" id="f-rut" type="text" placeholder="12.345.678-9" required>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-fnac">Fecha de nacimiento</label>
+          <input class="form-input" id="f-fnac" type="date">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-cur">Curso *</label>
+          <select class="form-select" id="f-cur" required>
+            <option value="">Seleccionar curso</option>
+            <option value="1°A">1°A</option>
+            <option value="1°B">1°B</option>
+            <option value="2°A">2°A</option>
+            <option value="2°B">2°B</option>
+            <option value="3°A">3°A</option>
+            <option value="3°B">3°B</option>
+            <option value="4°A">4°A</option>
+            <option value="4°B">4°B</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-nee">Tipo de NEE *</label>
+          <select class="form-select" id="f-nee" required>
+            <option value="">Seleccionar NEE</option>
+            <option value="NEEP">NEEP — Necesidad permanente</option>
+            <option value="NEET">NEET — Necesidad transitoria</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-diag">Diagnóstico *</label>
+          <select class="form-select" id="f-diag" required>
+            <option value="">Seleccionar diagnóstico</option>
+            <option value="DIL">DIL — Discapacidad intelectual leve</option>
+            <option value="DEA">DEA — Dificultad específica del aprendizaje</option>
+            <option value="FIL">FIL — Funcionamiento intelectual límite</option>
+            <option value="TEA">TEA — Trastorno del espectro autista</option>
+            <option value="TDA">TDA — Trastorno déficit atencional</option>
+            <option value="TDA-H">TDA-H — Déficit atencional con hiperactividad</option>
+            <option value="TEL">TEL — Trastorno específico del lenguaje</option>
+            <option value="DM">DM — Discapacidad motora</option>
+            <option value="DV">DV — Discapacidad visual</option>
+            <option value="DA">DA — Discapacidad auditiva</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Contacto y domicilio</div>
+        <div class="form-field">
+          <label class="form-label" for="f-dir">Dirección</label>
+          <input class="form-input" id="f-dir" type="text" placeholder="Calle, número, población, ciudad">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-tel">Teléfono</label>
+          <input class="form-input" id="f-tel" type="tel" placeholder="+56 9 1234 5678">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-apoderado">Apoderado/a</label>
+          <input class="form-input" id="f-apoderado" type="text" placeholder="Nombre del apoderado">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Educador/a diferencial</div>
+        <div class="form-field">
+          <label class="form-label" for="f-pp">Profesional</label>
+          <input class="form-input" id="f-pp" type="text" placeholder="Nombre completo">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-nrp">N° Registro</label>
+          <input class="form-input" id="f-nrp" type="text" placeholder="Número de registro">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-ep">Fecha evaluación</label>
+          <input class="form-input" id="f-ep" type="date">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-rp">Fecha revaluación</label>
+          <input class="form-input" id="f-rp" type="date">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Médico / Neurólogo / Psiquiatra</div>
+        <div class="form-field">
+          <label class="form-label" for="f-pm">Profesional</label>
+          <input class="form-input" id="f-pm" type="text" placeholder="Nombre completo">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-nrm">N° Registro</label>
+          <input class="form-input" id="f-nrm" type="text" placeholder="Número de registro">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-vm">Fecha visita médica</label>
+          <input class="form-input" id="f-vm" type="date">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-rm">Fecha reeval. médica</label>
+          <input class="form-input" id="f-rm" type="date">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Psicólogo/a</div>
+        <div class="form-field">
+          <label class="form-label" for="f-ppsi">Profesional</label>
+          <input class="form-input" id="f-ppsi" type="text" placeholder="Nombre completo">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-nrpsi">N° Registro</label>
+          <input class="form-input" id="f-nrpsi" type="text" placeholder="Número de registro">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-epsi">Fecha evaluación</label>
+          <input class="form-input" id="f-epsi" type="date">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-rpsi">Fecha revaluación</label>
+          <input class="form-input" id="f-rpsi" type="date">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">Fonoaudiología</div>
+        <div class="form-field">
+          <label class="form-label" for="f-pf">Profesional</label>
+          <input class="form-input" id="f-pf" type="text" placeholder="Nombre completo">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-nrf">N° Registro</label>
+          <input class="form-input" id="f-nrf" type="text" placeholder="Número de registro">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-ef">Fecha evaluación</label>
+          <input class="form-input" id="f-ef" type="date">
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="f-rf">Fecha revaluación</label>
+          <input class="form-input" id="f-rf" type="date">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-save">Guardar estudiante</button>
+    </form>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
